@@ -2,60 +2,88 @@ using System;
 
 public static class CargadorEquipos
 {
-    public static ListaEnlazada<Equipo> Obtener48Equipos()
+    public static ListaEnlazada<Grupo> InicializarGruposOficiales()
     {
-        ListaEnlazada<Equipo> lista = new ListaEnlazada<Equipo>();
+        ListaEnlazada<Grupo> listaGrupos = new ListaEnlazada<Grupo>();
 
-        // Registramos las 48 selecciones clasificadas ordenadas por ELO inicial (Datos del PDF de la cátedra)
-        lista.Agregar(new Equipo("Argentina", 2120));
-        lista.Agregar(new Equipo("Francia", 2040));
-        lista.Agregar(new Equipo("España", 2020));
-        lista.Agregar(new Equipo("Inglaterra", 2000));
-        lista.Agregar(new Equipo("Brasil", 1980));
-        lista.Agregar(new Equipo("Bélgica", 1960));
-        lista.Agregar(new Equipo("Países Bajos", 1940));
-        lista.Agregar(new Equipo("Portugal", 1920));
-        lista.Agregar(new Equipo("Italia", 1900));
-        lista.Agregar(new Equipo("Alemania", 1880));
-        lista.Agregar(new Equipo("Uruguay", 1860));
-        lista.Agregar(new Equipo("Croacia", 1840));
-        lista.Agregar(new Equipo("Marruecos", 1820));
-        lista.Agregar(new Equipo("Colombia", 1800));
-        lista.Agregar(new Equipo("EE. UU.", 1780));
-        lista.Agregar(new Equipo("México", 1760));
-        lista.Agregar(new Equipo("Japón", 1740));
-        lista.Agregar(new Equipo("Senegal", 1720));
-        lista.Agregar(new Equipo("Irán", 1700));
-        lista.Agregar(new Equipo("Dinamarca", 1680));
-        lista.Agregar(new Equipo("Suiza", 1660));
-        lista.Agregar(new Equipo("Corea del Sur", 1640));
-        lista.Agregar(new Equipo("Australia", 1620));
-        lista.Agregar(new Equipo("Ucrania", 1600));
-        lista.Agregar(new Equipo("Austria", 1580));
-        lista.Agregar(new Equipo("Suecia", 1560));
-        lista.Agregar(new Equipo("Ecuador", 1540));
-        lista.Agregar(new Equipo("Polonia", 1520));
-        lista.Agregar(new Equipo("Gales", 1500));
-        lista.Agregar(new Equipo("Hungría", 1480));
-        lista.Agregar(new Equipo("Serbia", 1460));
-        lista.Agregar(new Equipo("Túnez", 1440));
-        lista.Agregar(new Equipo("Chile", 1420));
-        lista.Agregar(new Equipo("Argelia", 1400));
-        lista.Agregar(new Equipo("Canadá", 1380));
-        lista.Agregar(new Equipo("Perú", 1360));
-        lista.Agregar(new Equipo("Nigeria", 1340));
-        lista.Agregar(new Equipo("Egipto", 1320));
-        lista.Agregar(new Equipo("Camerún", 1300));
-        lista.Agregar(new Equipo("Costa de Marfil", 1280));
-        lista.Agregar(new Equipo("Costa Rica", 1260));
-        lista.Agregar(new Equipo("Paraguay", 1240));
-        lista.Agregar(new Equipo("Mali", 1220));
-        lista.Agregar(new Equipo("Qatar", 1200));
-        lista.Agregar(new Equipo("Arabia Saudita", 1180));
-        lista.Agregar(new Equipo("Panamá", 1160));
-        lista.Agregar(new Equipo("Jamaica", 1140));
-        lista.Agregar(new Equipo("Nueva Zelanda", 1100));
+        for (char c = 'A'; c <= 'L'; c++)
+        {
+            listaGrupos.Agregar(new Grupo(c));
+        }
 
-        return lista;
+        InyectarEquipoAGrupo(listaGrupos, 'A', "México", 1600);
+        InyectarEquipoAGrupo(listaGrupos, 'A', "Sudáfrica", 1355);
+        InyectarEquipoAGrupo(listaGrupos, 'A', "Corea del Sur", 1530);
+        InyectarEquipoAGrupo(listaGrupos, 'A', "República Checa", 1475);
+
+        InyectarEquipoAGrupo(listaGrupos, 'B', "Canadá", 1400);
+        InyectarEquipoAGrupo(listaGrupos, 'B', "Bosnia y Her.", 1310);
+        InyectarEquipoAGrupo(listaGrupos, 'B', "Qatar", 1480);
+        InyectarEquipoAGrupo(listaGrupos, 'B', "Suiza", 1570);
+
+        InyectarEquipoAGrupo(listaGrupos, 'C', "Brasil", 1776);
+        InyectarEquipoAGrupo(listaGrupos, 'C', "Marruecos", 1620);
+        InyectarEquipoAGrupo(listaGrupos, 'C', "Haití", 1280);
+        InyectarEquipoAGrupo(listaGrupos, 'C', "Escocia", 1450);
+
+        InyectarEquipoAGrupo(listaGrupos, 'D', "Estados Unidos", 1610);
+        InyectarEquipoAGrupo(listaGrupos, 'D', "Paraguay", 1375);
+        InyectarEquipoAGrupo(listaGrupos, 'D', "Australia", 1515);
+        InyectarEquipoAGrupo(listaGrupos, 'D', "Turquía", 1510);
+
+        InyectarEquipoAGrupo(listaGrupos, 'E', "Alemania", 1590);
+        InyectarEquipoAGrupo(listaGrupos, 'E', "Curazao", 1260);
+        InyectarEquipoAGrupo(listaGrupos, 'E', "Costa de Marfil", 1460);
+        InyectarEquipoAGrupo(listaGrupos, 'E', "Ecuador", 1495);
+
+        InyectarEquipoAGrupo(listaGrupos, 'F', "Países Bajos", 1724);
+        InyectarEquipoAGrupo(listaGrupos, 'F', "Japón", 1580);
+        InyectarEquipoAGrupo(listaGrupos, 'F', "Suecia", 1500);
+        InyectarEquipoAGrupo(listaGrupos, 'F', "Túnez", 1440);
+
+        InyectarEquipoAGrupo(listaGrupos, 'G', "Bélgica", 1744);
+        InyectarEquipoAGrupo(listaGrupos, 'G', "Egipto", 1470);
+        InyectarEquipoAGrupo(listaGrupos, 'G', "Irán", 1565);
+        InyectarEquipoAGrupo(listaGrupos, 'G', "Nueva Zelanda", 1200);
+
+        InyectarEquipoAGrupo(listaGrupos, 'H', "España", 1772);
+        InyectarEquipoAGrupo(listaGrupos, 'H', "Cabo Verde", 1340);
+        InyectarEquipoAGrupo(listaGrupos, 'H', "Arabia Saudita", 1380);
+        InyectarEquipoAGrupo(listaGrupos, 'H', "Uruguay", 1660);
+
+        InyectarEquipoAGrupo(listaGrupos, 'I', "Francia", 1840);
+        InyectarEquipoAGrupo(listaGrupos, 'I', "Senegal", 1550);
+        InyectarEquipoAGrupo(listaGrupos, 'I', "Irak", 1360);
+        InyectarEquipoAGrupo(listaGrupos, 'I', "Noruega", 1410);
+
+        InyectarEquipoAGrupo(listaGrupos, 'J', "Argentina", 1860);
+        InyectarEquipoAGrupo(listaGrupos, 'J', "Argelia", 1415);
+        InyectarEquipoAGrupo(listaGrupos, 'J', "Austria", 1520);
+        InyectarEquipoAGrupo(listaGrupos, 'J', "Jordania", 1320);
+
+        InyectarEquipoAGrupo(listaGrupos, 'K', "Portugal", 1741);
+        InyectarEquipoAGrupo(listaGrupos, 'K', "RD Congo", 1330);
+        InyectarEquipoAGrupo(listaGrupos, 'K', "Uzbekistán", 1335);
+        InyectarEquipoAGrupo(listaGrupos, 'K', "Colombia", 1721);
+
+        InyectarEquipoAGrupo(listaGrupos, 'L', "Inglaterra", 1785);
+        InyectarEquipoAGrupo(listaGrupos, 'L', "Croacia", 1640);
+        InyectarEquipoAGrupo(listaGrupos, 'L', "Ghana", 1350);
+        InyectarEquipoAGrupo(listaGrupos, 'L', "Panamá", 1420);
+
+        return listaGrupos;
+    }
+
+    private static void InyectarEquipoAGrupo(ListaEnlazada<Grupo> lista, char letra, string nombre, double elo)
+    {
+        for (int i = 0; i < lista.Contar; i++)
+        {
+            Grupo g = lista.Obtener(i);
+            if (g.Letra == letra)
+            {
+                g.Equipos.Agregar(new Equipo(nombre, elo) { GrupoOrigen = letra });
+                break;
+            }
+        }
     }
 }

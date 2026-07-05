@@ -6,60 +6,83 @@ class Program
     {
         Console.WriteLine("=== SIMULADOR COMPLETO DEL MUNDIAL 2026 ===");
         
-        // 1. Fase de Grupos
-        ListaEnlazada<Equipo> elMundial = CargadorEquipos.Obtener48Equipos();
-        ListaEnlazada<Grupo> losGrupos = GestorTorneo.CrearGrupos(elMundial);
+        ListaEnlazada<Grupo> losGrupos = CargadorEquipos.InicializarGruposOficiales();
         GestorTorneo.SimularFaseDeGrupos(losGrupos);
 
-        // 2. Filtrar los 32 clasificados
-        ListaEnlazada<Equipo> ronda32 = GestorTorneo.ObtenerClasificadosFaseFinal(losGrupos);
-        Console.WriteLine($"\nFase inicial cerrada. {ronda32.Contar} equipos listos en las llaves eliminatorias.");
+        ListaEnlazada<Equipo> losMejoresTerceros = GestorTorneo.ResolverMatrizTerceros(losGrupos);
+        ListaEnlazada<PartidoEliminatorio> dieciseisavos = GestorTorneo.GenerarLlaves16avos(losGrupos, losMejoresTerceros);
 
-        // 3. Correr las llaves de Play-offs consecutivamente
-        ListaEnlazada<Equipo> ronda16 = GestorTorneo.SimularRondaEliminatoria(ronda32, "Dieciseisavos de Final");
-        ListaEnlazada<Equipo> cuartos = GestorTorneo.SimularRondaEliminatoria(ronda16, "Octavos de Final");
-        ListaEnlazada<Equipo> semis = GestorTorneo.SimularRondaEliminatoria(cuartos, "Cuartos de Final");
-        ListaEnlazada<Equipo> finalistas = GestorTorneo.SimularRondaEliminatoria(semis, "Semifinales");
-
-        // 4. GRAN FINAL
-        Console.WriteLine($"\n=========================================");
-        Console.WriteLine($" !!! GRAN FINAL DEL MUNDIAL 2026 !!!");
-        Console.WriteLine($"=========================================");
-        Equipo subcampeon;
-        Equipo campeon;
-
-        Equipo fA = finalistas.Obtener(0);
-        Equipo fB = finalistas.Obtener(1);
-
-        var (gfA, gfB) = MotorEstocastico.SimularPartido(fA, fB);
-        Console.Write($"\n[FINAL] {fA.Nombre} {gfA} - {gfB} {fB.Nombre}");
-
-        if (gfA > gfB)
+        Console.WriteLine("\n--- SIMULANDO DIECISEISAVOS DE FINAL ---");
+        ListaEnlazada<Equipo> clasificadosOctavos = new ListaEnlazada<Equipo>();
+        for (int i = 0; i < dieciseisavos.Contar; i++)
         {
-            campeon = fA;
-            subcampeon = fB;
-        }
-        else if (gfB > gfA)
-        {
-            campeon = fB;
-            subcampeon = fA;
-        }
-        else
-        {
-            Console.Write(" [Empate Histórico! Penales] ->");
-            if (MotorEstocastico.SimularPenalesBernoulli(fA, fB))
-            {
-                campeon = fA;
-                subcampeon = fB;
-            }
-            else
-            {
-                campeon = fB;
-                subcampeon = fA;
-            }
+            PartidoEliminatorio partido = dieciseisavos.Obtener(i);
+            partido.Jugar();
+            Console.WriteLine($"Partido {partido.NumeroPartido}: {partido.ResultadoTexto}");
+            clasificadosOctavos.Agregar(partido.Ganador);
         }
 
-        Console.WriteLine($"\n\n🏆 ¡EL NUEVO CAMPEÓN DEL MUNDO ES: {campeon.Nombre.ToUpper()}! 🏆");
+        Console.WriteLine("\n--- SIMULANDO OCTAVOS DE FINAL ---");
+        ListaEnlazada<PartidoEliminatorio> octavos = new ListaEnlazada<PartidoEliminatorio>();
+        int numPartido = 89;
+        for (int i = 0; i < clasificadosOctavos.Contar; i += 2)
+        {
+            octavos.Agregar(new PartidoEliminatorio(numPartido++, clasificadosOctavos.Obtener(i), clasificadosOctavos.Obtener(i + 1)));
+        }
+
+        ListaEnlazada<Equipo> clasificadosCuartos = new ListaEnlazada<Equipo>();
+        for (int i = 0; i < octavos.Contar; i++)
+        {
+            PartidoEliminatorio partido = octavos.Obtener(i);
+            partido.Jugar();
+            Console.WriteLine($"Partido {partido.NumeroPartido}: {partido.ResultadoTexto}");
+            clasificadosCuartos.Agregar(partido.Ganador);
+        }
+
+        Console.WriteLine("\n--- SIMULANDO CUARTOS DE FINAL ---");
+        ListaEnlazada<PartidoEliminatorio> cuartos = new ListaEnlazada<PartidoEliminatorio>();
+        for (int i = 0; i < clasificadosCuartos.Contar; i += 2)
+        {
+            cuartos.Agregar(new PartidoEliminatorio(numPartido++, clasificadosCuartos.Obtener(i), clasificadosCuartos.Obtener(i + 1)));
+        }
+
+        ListaEnlazada<Equipo> clasificadosSemis = new ListaEnlazada<Equipo>();
+        for (int i = 0; i < cuartos.Contar; i++)
+        {
+            PartidoEliminatorio partido = cuartos.Obtener(i);
+            partido.Jugar();
+            Console.WriteLine($"Partido {partido.NumeroPartido}: {partido.ResultadoTexto}");
+            clasificadosSemis.Agregar(partido.Ganador);
+        }
+
+        Console.WriteLine("\n--- SIMULANDO SEMIFINALES ---");
+        ListaEnlazada<PartidoEliminatorio> semifinales = new ListaEnlazada<PartidoEliminatorio>();
+        for (int i = 0; i < clasificadosSemis.Contar; i += 2)
+        {
+            semifinales.Agregar(new PartidoEliminatorio(numPartido++, clasificadosSemis.Obtener(i), clasificadosSemis.Obtener(i + 1)));
+        }
+
+        ListaEnlazada<Equipo> finalistas = new ListaEnlazada<Equipo>();
+        for (int i = 0; i < semifinales.Contar; i++)
+        {
+            PartidoEliminatorio partido = semifinales.Obtener(i);
+            partido.Jugar();
+            Console.WriteLine($"Partido {partido.NumeroPartido}: {partido.ResultadoTexto}");
+            finalistas.Agregar(partido.Ganador);
+        }
+
+        Console.WriteLine("\n=========================================");
+        Console.WriteLine(" !!! GRAN FINAL DEL MUNDIAL 2026 !!!");
+        Console.WriteLine("=========================================");
+
+        PartidoEliminatorio granFinal = new PartidoEliminatorio(104, finalistas.Obtener(0), finalistas.Obtener(1));
+        granFinal.Jugar();
+        Console.WriteLine($"\n[FINAL] {granFinal.ResultadoTexto}");
+
+        Equipo campeon = granFinal.Ganador;
+        Equipo subcampeon = granFinal.Ganador == granFinal.EquipoA ? granFinal.EquipoB : granFinal.EquipoA;
+
+        Console.WriteLine($"\n🏆 ¡EL NUEVO CAMPEÓN DEL MUNDO ES: {campeon.Nombre.ToUpper()}! 🏆");
         Console.WriteLine($"🥈 Subcampeón: {subcampeon.Nombre}");
         Console.WriteLine("\n=========================================");
     }
