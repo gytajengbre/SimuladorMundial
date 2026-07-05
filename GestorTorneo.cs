@@ -30,7 +30,7 @@ public static class GestorTorneo
         }
     }
 
-    public static void OrdenarGrupo(Grupo grupo)
+   public static void OrdenarGrupo(Grupo grupo)
     {
         int n = grupo.Equipos.Contar;
         for (int i = 0; i < n - 1; i++)
@@ -38,24 +38,35 @@ public static class GestorTorneo
             for (int j = 0; j < n - i - 1; j++)
             {
                 Equipo eqJ = grupo.Equipos.Obtener(j);
-                Equipo eqJ1 = group.Equipos.Obtener(j + 1);
+                Equipo eqJ1 = grupo.Equipos.Obtener(j + 1);
 
                 bool intercambiar = false;
-                if (eqJ.Puntos < eqJ1.Puntos) { intercambiar = true; }
+                if (eqJ.Puntos < eqJ1.Puntos) 
+                { 
+                    intercambiar = true; 
+                }
                 else if (eqJ.Puntos == eqJ1.Puntos)
                 {
-                    if (eqJ.DiferenciaGoles < eqJ1.DiferenciaGoles) { intercambiar = true; }
+                    if (eqJ.DiferenciaGoles < eqJ1.DiferenciaGoles) 
+                    { 
+                        intercambiar = true; 
+                    }
                     else if (eqJ.DiferenciaGoles == eqJ1.DiferenciaGoles)
                     {
-                        if (eqJ.GolesFavor < eqJ1.GolesFavor) { intercambiar = true; }
+                        if (eqJ.GolesFavor < eqJ1.GolesFavor) 
+                        { 
+                            intercambiar = true; 
+                        }
                     }
                 }
 
-                if (intercambiar) { grupo.Equipos.Intercambiar(j, j + 1); }
+                if (intercambiar) 
+                { 
+                    grupo.Equipos.Intercambiar(j, j + 1); 
+                }
             }
         }
     }
-
     // ALGORITMO CODICIOSO: Filtra y distribuye los mejores terceros según la matriz de la FIFA
     public static ListaEnlazada<Equipo> ResolverMatrizTerceros(ListaEnlazada<Grupo> listaGrupos)
     {
